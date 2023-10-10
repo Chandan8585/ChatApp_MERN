@@ -4,7 +4,7 @@
   "description": "building chat_app using mern stack",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "start"
   },
   "repository": {
     "type": "git",
@@ -15,5 +15,11 @@
   "bugs": {
     "url": "https://github.com/Chandan8585/ChatApp_MERN/issues"
   },
-  "homepage": "https://github.com/Chandan8585/ChatApp_MERN#readme"
+  "homepage": "https://github.com/Chandan8585/ChatApp_MERN#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "nodemon": "^3.0.1"
+  }
 }
