@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import "./auth.css"
 import {Formik, Form, Field, ErrorMessage} from 'formik';
 import * as yup from 'yup';
-
+import { Link } from 'react-router-dom';
 
 const initalValues = {
     email: "",
@@ -24,7 +24,7 @@ const Login = () => {
         initialValues={initalValues}
         validationSchema={validationSchema}
         onSubmit={handleSubmit}
-        className= 'login-container'
+      
         >
             <Form>
                  <div className='form-container'>
@@ -40,8 +40,11 @@ const Login = () => {
                  <div className='submit-btn'>
                  <button type='submit' className='btn-margin'>Login</button>
                  </div>
+                 <div className='submit-btn'>
+                 <button type='submit' className='btn-margin'>Login with Test Credentials</button>
+                 </div>
                  <div className='login'> 
-          {/* <p>Already have an account <Link to="/auth/login"><span className='span'>Login</span></Link> here</p> */}
+          <p>Do not have any account <Link to="/SignUp"><span className='span'>Sign Up</span></Link> here</p>
     </div>
             </Form>
         </Formik>
