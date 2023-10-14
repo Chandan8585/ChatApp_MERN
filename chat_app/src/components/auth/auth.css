@@ -1,6 +1,6 @@
 .container {
     max-width: 40%;
-    height: 30rem;
+    height: fit-content;
     margin: 5rem auto;
     padding: 20px;
     border: 1px solid #ccc;
@@ -10,12 +10,14 @@
   
   .auth-title {
     text-align: center;
-    height: 3rem;
+    font-size: 3rem;
+    font-weight: 600;
     margin-bottom: 20px;
   }
   
   .form-container {
     margin-bottom: 15px;
+    font-size: 1.2rem;
   }
   
   .form-label {
@@ -53,16 +55,22 @@
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s;
+    width: 100%;
   }
   
   .btn-margin:hover {
     background-color: #45a049;
+    width: 100%;
   }
   
   .login {
     text-align: center;
     margin-top: 20px;
+    width: 100%;
   }
-  
+  .span{
+    color: #4caf50;
+    font-weight: bolder;
+  }
   /* Add any additional styles or modify the existing ones as needed */
   
