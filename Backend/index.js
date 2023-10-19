@@ -1,21 +1,49 @@
-const express = require("express");
-const dotenv = require("dotenv");
-const chats = require("./data/data");
-const cors = require("cors")
+const express = require('express');
+const mongoose = require('mongoose');
+const dotenv = require('dotenv');
+const cors = require('cors');
+const connectDB = require('./config/dbConfig');
+const authRouter = require('./routes/authRouter');
+const chats = require('./data/data');
+
+dotenv.config();
+connectDB();
 const app = express();
 app.use(cors());
-app.get("/", (req, res)=> {
-    res.send("API is running");
-})
-app.get("/api/chats", (req, res)=> {
-    res.send(chats);
-})
-app.get("/api/chats/:id", (req, res)=> {
-    const singleChat = chats.find((chat)=> 
-        chat._id === req.params.id 
-    )
-    res.send(singleChat);
-})
+app.use(express.json());
 
-const PORT = process.env.PORT || 8080;
-app.listen(PORT, console.log("server is ruuning"));
+app.get('/', (req, res) => {
+    res.send('API is running');
+});
+
+app.get('/api/chats', (req, res) => {
+    res.send(chats);
+});
+
+app.get('/api/chats/:id', (req, res) => {
+    const singleChat = chats.find((chat) => chat._id === req.params.id);
+    res.send(singleChat);
+});
+
+app.use('/api/auth', authRouter); 
+
+const PORT = 8080;
+
+
+// process.on('SIGINT', () => {
+//     mongoose.connection.close(() => {
+//         console.log('MongoDB connection closed.');
+//         process.exit(0);
+//     });
+// });
+
+
+
+mongoose.connection.once('open', () => {
+    console.log('Connected to DB'); 
+
+ 
+    app.listen(process.env.PORT ||PORT, () => {
+        console.log('Server is running');
+    });
+});
