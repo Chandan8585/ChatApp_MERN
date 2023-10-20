@@ -4,6 +4,7 @@ const dotenv = require('dotenv');
 const cors = require('cors');
 const connectDB = require('./config/dbConfig');
 const authRouter = require('./routes/authRouter');
+const userRouter = require('./routes/userRouter');
 const chats = require('./data/data');
 
 dotenv.config();
@@ -26,7 +27,7 @@ app.get('/api/chats/:id', (req, res) => {
 });
 
 app.use('/api/auth', authRouter); 
-
+app.use("/api/user" ,userRouter); 
 const PORT = 8080;
 
 
