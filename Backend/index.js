@@ -5,6 +5,7 @@ const cors = require('cors');
 const connectDB = require('./config/dbConfig');
 const authRouter = require('./routes/authRouter');
 const userRouter = require('./routes/userRouter');
+const chatRouter = require('./routes/chatRouter');
 const chats = require('./data/data');
 
 dotenv.config();
@@ -28,15 +29,8 @@ app.get('/api/chats/:id', (req, res) => {
 
 app.use('/api/auth', authRouter); 
 app.use("/api/user" ,userRouter); 
+app.use('/api/chat',  chatRouter);
 const PORT = 8080;
-
-
-// process.on('SIGINT', () => {
-//     mongoose.connection.close(() => {
-//         console.log('MongoDB connection closed.');
-//         process.exit(0);
-//     });
-// });
 
 
 
