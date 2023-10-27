@@ -28,7 +28,7 @@ app.get('/api/chats/:id', (req, res) => {
 });
 
 app.use('/api/auth', authRouter); 
-app.use("/api/user" ,userRouter); 
+app.use("/api/user" , userRouter); 
 app.use('/api/chat',  chatRouter);
 const PORT = 8080;
 
