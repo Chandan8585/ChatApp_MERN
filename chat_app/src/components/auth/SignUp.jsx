@@ -27,20 +27,18 @@ const SignUp = ()=> {
     const [serverError, setServerError] = useState("");
  
    const handleFormSubmit = async(values)=> {
-    let {userName, email, password} = values;
+    let {userName, email, password, pic} = values;
     
-      console.log({userName, email, password})
+      console.log({userName, email, password, pic})
 
        try {
-        const response = await axios.post("localhost:8080/api/auth/register", { userName: values.userName, email : values.email, password: values.password});
+        const response = await axios.post("https://chat-app-g3my.onrender.com/api/auth/register", values);
         console.log("signed up");
         console.log(response);
        } catch (error) {
         console.log(error);
         if (error.response && error.response.status === 409) {
             setServerError("User already exists with this email address");
-        } else {
-            setServerError("Something went wrong. Please try again later.");
         }
        }
        console.log(serverError);
@@ -86,7 +84,7 @@ const SignUp = ()=> {
                 <ErrorMessage name='pic' component='div' className='error-message' />
             </div>
             <div className='submit-btn'>
-                 <button type='submit' className='btn-margin' onClick={handleFormSubmit}>Sign Up</button>
+                 <button type='submit' className='btn-margin'>Sign Up</button>
             </div>
             <div className='login'> 
           <p>Already have an account <Link to="/login"><span className='span'>Login</span></Link> here</p>
