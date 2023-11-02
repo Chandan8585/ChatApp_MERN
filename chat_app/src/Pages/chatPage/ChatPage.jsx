@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
+import { useChat } from '../../components/context/chatContext';
 const ChatPage = () => {
     const [chat, setChat] = useState([]);
+    const {user} = useChat();
     useEffect(()=> {
     (async ()=> {
         try{
-            const response = await axios.get("/api/chats");
+            const response = await axios.get("https://chat-backend-vzo7.onrender.com/api/chats");
             console.log(response.data);
             setChat(response.data);
         } catch (error) {
@@ -14,22 +16,9 @@ const ChatPage = () => {
     })()
     }, []);
   return (
-    <div>{chat.map((item)=> {
-        return(
-            <div key={item._id}>
-                 <div>{item.users.map((user, index)=> {
-                   return(
-                    <div key={index}>
-                        <h2>{user.name}</h2>
-                        <p>{user.email}</p>
-                    </div>
-                   )
-                 })}</div>
-            </div>
-           
-        )
-   
-    })}</div>
+    <div>
+
+    </div>
   )
 }
 
