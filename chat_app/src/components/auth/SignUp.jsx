@@ -3,7 +3,6 @@ import * as yup from "yup"
 import "./auth.css"
 
 import { Link } from 'react-router-dom'
-// import { useAuth } from '../context/authContext'
 import axios from 'axios'
 import { useState } from 'react'
 const initialValues = {
@@ -16,7 +15,6 @@ const initialValues = {
 
 const validationSchema = yup.object({
     userName: yup.string().required("Username is required"),
-//  mobile: yup.string().matches(/^[0-9]{10}$/, 'Invalid Number').required("Mobile Number is required"),
  email: yup.string().email("Invalid email Address").required("Email is required"),
  password: yup.string().matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=!]).+$/, 'Password must include atleast 1 upperCase 1 lowerCase and any special Characters ex:- Abcd@1234').required('Password is required'),
  confirmPassword: yup.string().oneOf([yup.ref('password'), null], "Password not matching").required("Confirm password is required"),
@@ -32,7 +30,7 @@ const SignUp = ()=> {
       console.log({userName, email, password, pic})
 
        try {
-        const response = await axios.post("https://chat-app-g3my.onrender.com/api/auth/register", values);
+        const response = await axios.post("https://chat-backend-vzo7.onrender.com/api/auth/register", values);
         console.log("signed up");
         console.log(response);
        } catch (error) {

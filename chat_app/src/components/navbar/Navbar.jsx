@@ -27,7 +27,7 @@ const Navbar = () => {
      <button
   className="button btn-wishlist absolute d-flex align-center wishlist-btn"
       >
-  <span class="material-icons-outlined wishlist cursor">
+  <span className="material-icons-outlined wishlist cursor">
 favorite_border
 </span>
 <span className='number-of-items'>

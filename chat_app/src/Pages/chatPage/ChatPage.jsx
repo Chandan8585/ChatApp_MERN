@@ -1,35 +1,31 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
+import { useChat } from '../../components/context/chatContext';
+import SideDrawer from '../../components/sideDrawer/SideDrawer';
+import MyChat from '../../components/myChat/MyChat';
+import { Box } from "@chakra-ui/react";
 const ChatPage = () => {
     const [chat, setChat] = useState([]);
+    const {user} = useChat();
+    const token = localStorage.getItem("token");
     useEffect(()=> {
     (async ()=> {
         try{
-            const response = await axios.get("/api/chats");
+            const response = await axios.get("https://chat-backend-vzo7.onrender.com/api/chats");
             console.log(response.data);
             setChat(response.data);
         } catch (error) {
             console.log(error);
         }
     })()
-    }, []);
+    }, []); 
   return (
-    <div>{chat.map((item)=> {
-        return(
-            <div key={item._id}>
-                 <div>{item.users.map((user, index)=> {
-                   return(
-                    <div key={index}>
-                        <h2>{user.name}</h2>
-                        <p>{user.email}</p>
-                    </div>
-                   )
-                 })}</div>
-            </div>
-           
-        )
-   
-    })}</div>
+    <div style={{width: "100%"}}>
+       {token && <SideDrawer/> }
+      <Box d="flex" justify-content='space-between' w='100%' h='91.5vh' p='10px'>
+        {token && <MyChat/>}
+      </Box>
+    </div>
   )
 }
 
