@@ -1,32 +1,27 @@
-import React, { useEffect, useState } from 'react'
-import axios from 'axios'
+import React, { useState } from 'react';
+import './chatPage.css';
+// import axios from 'axios';
 import { useChat } from '../../components/context/chatContext';
 import SideDrawer from '../../components/sideDrawer/SideDrawer';
 import MyChat from '../../components/myChat/MyChat';
-import { Box } from "@chakra-ui/react";
+import { Box } from '@chakra-ui/layout';
+import ChatBox from '../../components/chatBox/ChatBox';
+
 const ChatPage = () => {
-    const [chat, setChat] = useState([]);
-    const {user} = useChat();
-    const token = localStorage.getItem("token");
-    useEffect(()=> {
-    (async ()=> {
-        try{
-            const response = await axios.get("https://chat-backend-vzo7.onrender.com/api/chats");
-            console.log(response.data);
-            setChat(response.data);
-        } catch (error) {
-            console.log(error);
-        }
-    })()
-    }, []); 
+  const [chat, setChat] = useState([]);
+//   const { user } = useChat();
+  const token = localStorage.getItem('token');
+ 
+
   return (
-    <div style={{width: "100%"}}>
-       {token && <SideDrawer/> }
-      <Box d="flex" justify-content='space-between' w='100%' h='91.5vh' p='10px'>
-        {token && <MyChat/>}
+    <div className='chat' style={{width: "100%"}} >
+      {token && <SideDrawer />}
+      <Box className='box'>
+        {token && <MyChat />}
+        {token && <ChatBox />}
       </Box>
     </div>
-  )
-}
+  );
+};
 
-export default ChatPage
+export default ChatPage;

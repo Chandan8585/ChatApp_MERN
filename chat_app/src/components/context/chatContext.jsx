@@ -11,6 +11,8 @@ selecedChat: "",
 const Chatcontext = createContext(initialValues);
 
 const ChatProvider = ({children})=> {
+
+    
     const [{user, selecedChat}, chatDispatch ] = useReducer(chatReducer, initialValues);
   return (
     <Chatcontext.Provider values={{user, selecedChat, chatDispatch}}>
