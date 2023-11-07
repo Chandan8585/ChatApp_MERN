@@ -6,9 +6,7 @@ const userSchema =new mongoose.Schema({
     pic : {
         type: String,
         required: true,
-        default: "https://www.google.com/url?sa=i&url=https%3A%2F%2Fin.pinterest.com%2Fpin%2Foriginal-whatsapp-no-profile-pic-icon-in-2023--945826359227111743%2F&psig=AOvVaw1fYXm6iVH-9jM7seAFpYuY&ust=1697192608672000&source=images&cd=vfe&opi=89978449&ved=0CBEQjRxqFwoTCICNsKal8IEDFQAAAAAdAAAAABAE"
-    },
-},{
+        default: "https://images.unsplash.com/photo-1575936123452-b67c3203c357?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     timeStamps: true
 });
 
