@@ -5,6 +5,7 @@ import * as yup from 'yup';
 import { Link, useNavigate } from 'react-router-dom';
 
 import axios from 'axios'
+import { useChat } from '../context/chatContext';
 
 const initalValues = {
     email: "",
@@ -15,17 +16,23 @@ const validationSchema = yup.object({
     password: yup.string().matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=!]).+$/, 'Password must include atleast 1 upperCase 1 lowerCase and any spcial Character ex: Abcd@1234').required('Password is required')      
 })
 const Login = () => {
+    const {user, chatDispatch} = useChat();
     const navigate = useNavigate();
     const [serverError, setServerError] = useState(""); 
     const handleSubmit = async (values) => {
+     
         let {email, password} = values;
         try {
             const response = await axios.post("https://chat-backend-vzo7.onrender.com/api/auth/login", values);
             const token = response.data.accessToken ;
+           const userData = response.data.rest.userName;
+           const userPic = response.data.rest.pic;
             if(token){
                 navigate("/chats")
             }
             localStorage.setItem("token", token);
+            localStorage.setItem("userData", userData );
+            localStorage.setItem("userPic", userPic);
         } catch (error) {
             console.error(error);
             setServerError(error.message);

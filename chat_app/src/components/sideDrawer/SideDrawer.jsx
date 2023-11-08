@@ -1,22 +1,14 @@
-import { Box, Text, Tooltip,Button, Menu, MenuButton, Wrap, WrapItem, Avatar } from '@chakra-ui/react'
+import { Box, Text, Tooltip,Button, Menu, MenuButton, Wrap, WrapItem, Avatar, MenuList, MenuItem, MenuDivider } from '@chakra-ui/react'
 import {ChevronDownIcon} from '@chakra-ui/icons'
-import React, { useEffect, useState } from 'react';
+import React from 'react'
 import "./SideDrawer.css"
-import axios from 'axios';
+import { useChat, profileModal } from '../context/chatContext'
+import ProfileModal from '../Modals/ProfileModal'
 const SideDrawer = () => {
-const [user, setUser] = useState();
-    useEffect(() => {
-        (async () => {
-          try {
-            const response = await axios.get('https://chat-backend-vzo7.onrender.com/api/chats');
-            console.log(response.data);
-            setUser(response.data);
-          } catch (error) {
-            console.log(error);
-          }
-        })();
-      }, []);
-      
+    const userName = localStorage.getItem("userData");
+    const userImage = localStorage.getItem('userPic');
+    console.log("user",userName);
+       const {chatDispatch, profileModal} = useChat();
   return (
     <div className='navbar'>
      <div className='searchBar'>
@@ -44,11 +36,24 @@ notifications
     <MenuButton as={Button} rightIcon={<ChevronDownIcon />}> 
      <Wrap>
         <WrapItem>
-        <Avatar name={user.name}/> 
+        <Avatar
+        size="sm"
+         name={userName}
+         src={userImage}
+         /> 
         </WrapItem>
      </Wrap>
     </MenuButton>
-
+    <MenuList>
+       <MenuItem onClick={chatDispatch({
+        type: "OPEN_PROFILE_MODAL",
+       })}> My Profile</MenuItem> 
+       <MenuDivider></MenuDivider>
+       <MenuItem>Logout </MenuItem>
+       </MenuList>
+   {
+    profileModal && <ProfileModal/>
+   }
 </Menu>
 </div>
     </div>
