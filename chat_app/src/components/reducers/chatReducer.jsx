@@ -4,9 +4,9 @@ export const chatReducer = (state, {type, payload})=> {
             ...state,
             user: payload
         }
-        case "OPEN_PROFILE_MODAL": return {
+        case "TOGGLE_PROFILE_MODAL": return {
             ...state,
-            profileModal : true
+            profileModal : !state.profileModal
         }
         default:
             return state;

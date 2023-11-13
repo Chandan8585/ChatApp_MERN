@@ -1,0 +1,36 @@
+.profile-modal{
+    padding: 10px; 
+    position: absolute;
+    right: 18rem;
+    top: 1rem;
+    width: 20vw;
+  height: 40vh;
+  border: 2px solid black;
+  background-color: burlywood;
+ 
+  align-items: center;
+  flex-direction: column;
+}
+.close-btn{
+    position: absolute;
+    right: 0.5rem;
+    background-color: #fff;
+}
+
+.user-detail{
+    border: 2px solid black;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: max-content;
+    align-items: center;
+}
+
+.userName{
+    margin-bottom: 1rem;
+}
+
+.user-image{
+    border-radius: 20px;
+    border: 5px solid black;
+}
