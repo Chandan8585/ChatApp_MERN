@@ -15,7 +15,7 @@ const ChatPage = () => {
     (async () => {
       try {
         const response = await axios.get('https://chat-backend-vzo7.onrender.com/api/chats');
-        console.log(response.data);
+       
         setChat(response.data);
       } catch (error) {
         console.log(error);
