@@ -1,35 +1,48 @@
-import { Box, Text, Tooltip,Button, Menu, MenuButton, Wrap, WrapItem, Avatar, MenuList, MenuItem, MenuDivider,    Drawer,
-    DrawerBody,
-    DrawerHeader,
-    DrawerOverlay,
-    DrawerContent,
-    DrawerCloseButton,
-    useDisclosure,
-    Input,
-    useToast, } from '@chakra-ui/react'
+import { Box, Text, Wrap, WrapItem } from "@chakra-ui/layout";
+import { Button } from "@chakra-ui/button";
+import { useDisclosure } from "@chakra-ui/hooks";
+import {
+  Menu,
+  MenuButton,
+  MenuDivider,
+  MenuItem,
+  MenuList,
+} from "@chakra-ui/menu";
+import {
+  Drawer,
+  DrawerBody,
+  DrawerContent,
+  DrawerHeader,
+  DrawerOverlay,
+  DrawerCloseButton
+} from "@chakra-ui/modal";
+
+import { Tooltip } from "@chakra-ui/tooltip";
+import { Input } from "@chakra-ui/input";
 import {ChevronDownIcon} from '@chakra-ui/icons'
+import { Avatar } from "@chakra-ui/avatar";
+import { Spinner } from "@chakra-ui/spinner";
+import { useToast } from "@chakra-ui/toast";
 import React, { useState } from 'react'
 import "./SideDrawer.css"
-import { useChat, profileModal } from '../context/chatContext'
+import { useChat} from '../context/chatContext'
 import ProfileModal from '../Modals/ProfileModal'
-import {
-
-  } from '@chakra-ui/react'
 import axios from 'axios'
 import ChatSkeleton from '../skeletalComponents/ChatSkeletal'
 import UserList from '../userList/UserList'
+// import { MessageState } from "../context/MessageProvider";
+
 const SideDrawer = () => {
-    const [search, setSearch] = useState("");
-   const [searchResult, setSearchResult] = useState([]);
+    const {chatDispatch, selectedChat, user, setChats ,chats, loadingChat, profileModal, search, searchResult} = useChat();
+    // const [, setSelectedChat, chats, setChats] = MessageState();
    const [loading, setLoading] = useState(false);
-  const [error, seterror] = useState();
-  const token = localStorage.getItem("token");
-const toast = useToast();
-    const userName = localStorage.getItem("userData");
-    const userImage = localStorage.getItem('userPic');
-  
-       const {chatDispatch, profileModal, user } = useChat();
-       const { isOpen, onOpen, onClose } = useDisclosure();
+  const userInfoString = typeof localStorage !== 'undefined' ? localStorage.getItem("userInfo") : null;
+  const userInfo = userInfoString ? JSON.parse(userInfoString) : null;
+  const token = userInfo?.accessToken;
+  const toast = useToast();
+  const userName = userInfo?.rest?.userName;
+  const userImage =  userInfo?.rest?.pic;
+const { isOpen, onOpen, onClose } = useDisclosure();
        const btnRef = React.useRef()
      
 
@@ -38,9 +51,15 @@ const toast = useToast();
             type: "TOGGLE_PROFILE_MODAL",
            })
         }
-
-        const handleContactSearch = async ()=> {
+            
+        const handleSearch = (e) => {
+            chatDispatch({
+                type: "HANDLE_SEARCH_BTN",
+                payload: e.target.value
+              })
+        }
         
+        const handleContactSearch = async ()=> {
              if(!search){
                 toast({
                     title: "Nothing Entered",
@@ -48,7 +67,8 @@ const toast = useToast();
                     duration: 5000,
                     position: "top-left",
                     isClosable: true
-                })
+                });
+                return;
              }
                     try {
                         setLoading(true);
@@ -57,32 +77,68 @@ const toast = useToast();
                                 Authorization: `Bearer ${token}`,
                             },
                         };
-                        const data = await axios.get(`https://chat-backend-vzo7.onrender.com/api/user?search=${search}`,config);
-                         
-                        setSearchResult(data);
+                        const {data} = await axios.get(`https://chat-backend-vzo7.onrender.com/api/user?search=${search}`,config);
                         setLoading(false);
-                      
+                        chatDispatch({
+                            type: "CONTACT_SEARCH",
+                            payload: data,
+                           })
+                                  
                     } catch (error) {
                         toast({
                             title: "Error Occured",
                             description: "Faild to load Search Results",
                             duration: 5000,
-                            position: "top-left",
-                            status: "Error"
+                            position: "bottom-left",
+                            status: "error"
                         })
                     }
                     
             }
            
-        const accessChat = ({userId})=> {
-
+        const accessChat = async(userId)=> {
+         try {
+            chatDispatch({
+                type: "LOADING_CHAT"
+            })
+            const config = {
+                headers: {
+                    "Content-type":"application/json",
+                    Authorization: `Bearer ${token}`,
+                },
+            }
+            const {data} = await axios.post(`https://chat-backend-vzo7.onrender.com/api/chat`, {userId}, config);
+            if(!chats.find((c)=> c._id === data._id))
+           
+              chatDispatch({
+                type: "SETTING_CHAT_DATA",
+                payload: data
+              })
+              chatDispatch({
+                type: "CHAT_SELECTION",
+                payload: data
+              })
+        chatDispatch({
+            type: "LOADING_CHAT"
+        })
+            onClose();
+         } catch (error) {
+            toast({
+                title: "Error fetching the chat",
+                description: error.message,
+                status: "error",
+                duration: 5000,
+                isClosable: true,
+                position: "bottom-left",
+              });
+         }
         }
         
   return (
     <div className='navbar'>
-     <div className='searchBar' ref={btnRef} onClick={onOpen}>
+     <div className='searchBar' ref={btnRef} >
         <Tooltip label="Search Users to Chat" hasArrow placement="bottom-end" >
-            <Button variant="ghost">
+            <Button variant="ghost" onClick={onOpen}>
             <span className="material-icons-outlined">
             search
             </span>
@@ -103,7 +159,7 @@ notifications
 </Menu>
 <Menu>
     <MenuButton as={Button} rightIcon={<ChevronDownIcon />}> 
-     <Wrap>
+     <Wrap> 
         <WrapItem>
         <Avatar
         size="sm"
@@ -119,7 +175,8 @@ notifications
        <MenuItem>Logout </MenuItem>
        </MenuList>
    {
-    profileModal && <ProfileModal userName={userName} userImage={userImage} />
+    profileModal && <ProfileModal userName={userName}  userImage={userImage}/>
+
    }
 </Menu>
 </div>
@@ -138,23 +195,25 @@ notifications
           <DrawerBody className='drawer-search'>
             <Box d='flex' className='search-bar'>
             <Input placeholder='Type here...' value={search}   
-              onChange={(e)=> setSearch(e.target.value)}/>
+              onChange={(e)=> handleSearch(e)}
+              />
             <Button onClick={handleContactSearch}>Go</Button>
             </Box>
          
             
-            {
+             {
                 loading ? <ChatSkeleton/> : (
-                    // console.log("searchResult",searchResult)
-                   searchResult && searchResult.map((user)=> (<UserList
+                  
+                   searchResult && searchResult?.map((user)=> (<UserList
                          user={user}
                           key={user._id} 
                           handleFunction = {()=> accessChat(user._id)} 
                           />) )
                 )
-            }
-           
-            
+            } 
+         
+           {loadingChat && <Spinner ml="auto" d="flex" />}
+         
           </DrawerBody>
         </DrawerContent>
       </Drawer>
@@ -165,3 +224,7 @@ notifications
 }
 
 export default SideDrawer
+
+
+
+//need to fix token
